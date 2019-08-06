@@ -38,6 +38,7 @@ func NewAffiliateLink() *AffiliateLink {
 			"go.redirectingat.com":    &CommonAffiliateLink{S: "url"},
 			"linksynergy.walmart.com": &CommonAffiliateLink{S: "RD_PARAM1"},
 			"www.jdoqocy.com":         &CommonAffiliateLink{S: "url"},
+			"www.kqzyfj.com":          &CommonAffiliateLink{S: "url"},
 		},
 	}
 }
