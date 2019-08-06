@@ -34,9 +34,10 @@ type AffiliateLink struct {
 func NewAffiliateLink() *AffiliateLink {
 	return &AffiliateLink{
 		maps: map[string]http.Handler{
-			"go.redirectingat.com":  &CommonAffiliateLink{S: "url"},
-			"click.linksynergy.com": &CommonAffiliateLink{S: "murl"},
-			"www.jdoqocy.com":       &CommonAffiliateLink{S: "url"},
+			"click.linksynergy.com":   &CommonAffiliateLink{S: "murl"},
+			"go.redirectingat.com":    &CommonAffiliateLink{S: "url"},
+			"linksynergy.walmart.com": &CommonAffiliateLink{S: "RD_PARAM1"},
+			"www.jdoqocy.com":         &CommonAffiliateLink{S: "url"},
 		},
 	}
 }
