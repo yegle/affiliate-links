@@ -6,14 +6,14 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 )
 
 // CommonAffiliateLink redirect to the URL in the query string.
 type CommonAffiliateLink struct {
-	S string
 }
 
-func (c *CommonAffiliateLink) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (*CommonAffiliateLink) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	vs, err := url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
 		w.Header().Set("Content-Type", "text/plain")
@@ -21,8 +21,16 @@ func (c *CommonAffiliateLink) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 		fmt.Fprintf(w, "ERROR parsing query string: %v", err)
 		return
 	}
-	url := vs.Get(c.S)
-	http.Redirect(w, r, url, http.StatusSeeOther)
+	for _, v := range vs {
+		if url := v[0]; strings.HasPrefix(url, "http") {
+			http.Redirect(w, r, url, http.StatusSeeOther)
+			return
+		}
+	}
+	w.Header().Set("Content-Type", "text/plain")
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, "ERROR: don't know how to handle %v", r)
+	return
 }
 
 // AffiliateLink is an http.HandleFunc
@@ -33,13 +41,7 @@ type AffiliateLink struct {
 // NewAffiliateLink create an HTTP server that handles affiliate links
 func NewAffiliateLink() *AffiliateLink {
 	return &AffiliateLink{
-		maps: map[string]http.Handler{
-			"click.linksynergy.com":   &CommonAffiliateLink{S: "murl"},
-			"go.redirectingat.com":    &CommonAffiliateLink{S: "url"},
-			"linksynergy.walmart.com": &CommonAffiliateLink{S: "RD_PARM1"},
-			"www.jdoqocy.com":         &CommonAffiliateLink{S: "url"},
-			"www.kqzyfj.com":          &CommonAffiliateLink{S: "url"},
-		},
+		maps: map[string]http.Handler{},
 	}
 }
 
@@ -47,10 +49,7 @@ func (a *AffiliateLink) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	host := r.Header.Get("X-Forwarded-Host")
 	handler, ok := a.maps[host]
 	if !ok {
-		w.Header().Set("Content-Type", "text/plain")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, "ERROR: don't know how to handle %q: %v", host, r)
-		return
+		handler = &CommonAffiliateLink{}
 	}
 	handler.ServeHTTP(w, r)
 }
