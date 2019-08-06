@@ -2,7 +2,7 @@ FROM golang as build_env
 
 ADD . /app
 WORKDIR /app
-RUN go build -o affiliate_link .
+RUN CGO_ENABLED=0 go build -o affiliate_link .
 
 FROM gcr.io/distroless/static
 COPY --from=build_env /app/affiliate_link /affiliate_link
