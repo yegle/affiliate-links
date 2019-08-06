@@ -36,7 +36,7 @@ func NewAffiliateLink() *AffiliateLink {
 		maps: map[string]http.Handler{
 			"click.linksynergy.com":   &CommonAffiliateLink{S: "murl"},
 			"go.redirectingat.com":    &CommonAffiliateLink{S: "url"},
-			"linksynergy.walmart.com": &CommonAffiliateLink{S: "RD_PARAM1"},
+			"linksynergy.walmart.com": &CommonAffiliateLink{S: "RD_PARM1"},
 			"www.jdoqocy.com":         &CommonAffiliateLink{S: "url"},
 			"www.kqzyfj.com":          &CommonAffiliateLink{S: "url"},
 		},
