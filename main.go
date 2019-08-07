@@ -58,8 +58,6 @@ func (*OJRQ) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		qsParsingError(w, err)
 		return
 	}
-	w.Header().Set("Content-Type", "text/plain")
-	w.WriteHeader(http.StatusOK)
 	vs, err = url.ParseQuery(vs.Get("return"))
 	if err != nil {
 		qsParsingError(w, err)
